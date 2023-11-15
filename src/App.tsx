@@ -12,8 +12,6 @@ const router = createBrowserRouter(
   createRoutesFromElements(renderRoutes(ROUTES)),
 );
 
-console.log(renderRoutes(ROUTES));
-
 export default function App() {
   return (
     <ErrorBoundary FallbackComponent={ErrorPage}>
