@@ -3,10 +3,15 @@ import { ReactNode, Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { AppRouteProps } from './types';
 import ErrorPage from 'pages/Error';
+import { omit } from 'lodash-es';
 
-const renderRoutes = (routes: AppRouteProps[]): ReactNode[] =>
+const renderRoutes = (
+  routes: AppRouteProps[],
+  parentKey?: string,
+): ReactNode[] =>
   routes.map((route) => {
-    const { children, element: Element, path } = route;
+    const { children, element: Element, index, ...routeRest } = route;
+    const routeKey = index ? parentKey : route.key;
 
     const RouteElement = (
       <Suspense fallback={<LoadingOverlay />}>
@@ -14,26 +19,27 @@ const renderRoutes = (routes: AppRouteProps[]): ReactNode[] =>
       </Suspense>
     );
 
-    if (children) {
+    if (index) {
       return (
         <Route
-          key={path}
-          path={path}
+          {...omit(routeRest, 'path')}
+          index
           element={RouteElement}
           errorElement={<ErrorPage />}
-        >
-          {renderRoutes(children)}
-        </Route>
+          key={[routeKey, 'index'].join('-')}
+        />
       );
     }
 
     return (
       <Route
-        key={path}
-        path={path}
+        {...routeRest}
         element={RouteElement}
+        key={routeKey}
         errorElement={<ErrorPage />}
-      />
+      >
+        {children ? renderRoutes(children, routeKey) : undefined}
+      </Route>
     );
   });
 

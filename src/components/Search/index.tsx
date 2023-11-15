@@ -1,18 +1,34 @@
+import { Input } from 'antd';
+import { SearchProps } from 'antd/es/input';
 import { useState } from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
+import { RouteEnum } from 'routes/types';
 
-export default function Search() {
+const { Search } = Input;
+
+export default function SearchBar() {
   const [searchInput, setSearchInput] = useState('');
+  const navigate = useNavigate();
 
-  function onSubmit() {
-    console.log('submit');
-  }
+  const onSearch: SearchProps['onSearch'] = (value, event, info) => {
+    if (info?.source === 'input') {
+      // navigate(generatePath);
+    }
+  };
+
+  const onChangeInput: SearchProps['onChange'] = (event) => {
+    setSearchInput(event.target.value);
+  };
 
   return (
-    <input
+    <Search
+      placeholder="Search GIFs by keyword"
       value={searchInput}
-      className="sticky"
-      onChange={(e) => setSearchInput(e.target.value)}
-      onSubmit={onSubmit}
+      onSearch={onSearch}
+      onChange={onChangeInput}
+      allowClear
+      size="large"
+      enterButton
     />
   );
 }
