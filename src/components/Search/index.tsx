@@ -1,8 +1,8 @@
 import { Input } from 'antd';
 import { SearchProps } from 'antd/es/input';
 import { useState } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
-import { RouteEnum } from 'routes/types';
+import { useNavigate } from 'react-router-dom';
+import { RoutePaths } from 'routes/types';
 
 const { Search } = Input;
 
@@ -12,7 +12,7 @@ export default function SearchBar() {
 
   const onSearch: SearchProps['onSearch'] = (value, event, info) => {
     if (info?.source === 'input') {
-      // navigate(generatePath);
+      navigate([RoutePaths.Home.search.gifs, searchInput].join('/'));
     }
   };
 
