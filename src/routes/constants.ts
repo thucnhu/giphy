@@ -5,16 +5,13 @@ export const RouteEnum = {
     index: '/',
     search: {
       index: 'search',
-      gifs: 'gifs',
-      stickers: 'stickers',
+      gifs: 'gifs/:keyword',
+      stickers: 'stickers/:keyword',
       containers: ':type/:keyword',
     },
-    gifs: {
-      index: ':id',
-    },
-    stickers: {
-      index: ':id',
-    },
+    gifs: 'gifs/:id',
+    stickers: 'stickers/:id',
+    mediaInfo: ':type/:id',
   },
   PageNotFound: '*',
 };

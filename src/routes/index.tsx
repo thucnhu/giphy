@@ -6,6 +6,7 @@ import { RouteEnum } from './constants';
 
 const HomePage = lazy(() => import('pages/Home'));
 const SearchResultsPage = lazy(() => import('pages/Search/Container'));
+const MediaInfoPage = lazy(() => import('pages/Info'));
 
 const ROUTES: RawAppRouteProps[] = [
   {
@@ -35,6 +36,10 @@ const ROUTES: RawAppRouteProps[] = [
         },
       },
     ],
+  },
+  {
+    key: 'Home.mediaInfo',
+    element: MediaInfoPage,
   },
 ];
 

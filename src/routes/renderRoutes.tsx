@@ -1,11 +1,20 @@
 import LoadingOverlay from 'components/LoadingOverlay';
-import { ReactNode, Suspense } from 'react';
+import {
+  ComponentType,
+  Fragment,
+  PropsWithChildren,
+  ReactNode,
+  Suspense,
+} from 'react';
 import { Outlet, Route } from 'react-router-dom';
 import { AppRouteProps } from './types';
 import ErrorPage from 'pages/Error';
 import { omit } from 'lodash-es';
 import { getRouteKey } from './helpers';
 import useDocumentTitleByRoute from 'hooks/useDocumentTitleByRoute';
+import { LayoutProps } from 'antd';
+import AppLayout from 'layouts';
+import RouteProtect from './RouteProtect';
 
 const renderRoutes = (
   routes: AppRouteProps[],
@@ -13,15 +22,28 @@ const renderRoutes = (
 ): ReactNode[] =>
   routes.map((route) => {
     const { children, element: Element = Outlet, index, ...routeRest } = route;
+
+    const isRootRoute = !parentKey;
     const routeKey = getRouteKey(route, parentKey) || '';
 
     const RouteElement = () => {
       useDocumentTitleByRoute();
 
+      let Layout: ComponentType<PropsWithChildren<LayoutProps>> = Fragment;
+
+      if (isRootRoute) {
+        // Only apply layout and provider to root route
+        Layout = AppLayout;
+      }
+
       return (
-        <Suspense fallback={<LoadingOverlay />}>
-          <Element />
-        </Suspense>
+        <RouteProtect>
+          <Layout>
+            <Suspense fallback={<LoadingOverlay />}>
+              <Element />
+            </Suspense>
+          </Layout>
+        </RouteProtect>
       );
     };
 
