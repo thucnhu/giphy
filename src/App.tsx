@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import ROUTES from 'routes';
 import renderRoutes from 'routes/renderRoutes';
+import { QueryClientProvider } from 'providers/QueryClientProvider';
 
 const router = createBrowserRouter(
   createRoutesFromElements(renderRoutes(ROUTES)),
@@ -15,7 +16,9 @@ const router = createBrowserRouter(
 export default function App() {
   return (
     <ErrorBoundary FallbackComponent={ErrorPage}>
-      <RouterProvider router={router} />
+      <QueryClientProvider>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </ErrorBoundary>
   );
 }
