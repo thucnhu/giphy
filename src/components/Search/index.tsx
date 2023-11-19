@@ -1,9 +1,8 @@
 import { Input } from 'antd';
 import { SearchProps } from 'antd/es/input';
 import classNames from 'classnames';
-import { lowerCase } from 'lodash-es';
 import { useState } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { Link, generatePath, useNavigate } from 'react-router-dom';
 import { RoutePaths } from 'routes/types';
 import { CommonProps } from 'types';
 
@@ -27,15 +26,20 @@ export default function SearchBar(props: CommonProps) {
   };
 
   return (
-    <Search
-      placeholder="Search GIFs by keyword"
-      value={searchInput}
-      onSearch={onSearch}
-      onChange={onChangeInput}
-      allowClear
-      size="large"
-      enterButton
-      className={classNames('max-w-11/12 w-[1024px]', className)}
-    />
+    <div>
+      <Link to={RoutePaths.Home.index}>
+        <img className="h-40px mr-2" src="/images/giphy-logo.png" />
+      </Link>
+      <Search
+        placeholder="Search GIFs by keyword"
+        value={searchInput}
+        onSearch={onSearch}
+        onChange={onChangeInput}
+        allowClear
+        size="large"
+        enterButton
+        className={classNames('max-w-11/12 w-[888px]', className)}
+      />
+    </div>
   );
 }

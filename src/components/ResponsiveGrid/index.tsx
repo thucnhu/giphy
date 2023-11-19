@@ -3,6 +3,8 @@ import { IGif, IUser } from '@giphy/js-types';
 import { GifOverlayProps, Grid } from '@giphy/react-components';
 import useViewportWidth from 'hooks/useViewportWidth';
 import { ElementType, SyntheticEvent } from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
+import { RoutePaths } from 'routes/types';
 
 interface GiphyGridProps {
   className?: string;
@@ -37,6 +39,8 @@ export default function ResponsiveGrid(props: GiphyGridProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { width, gutter = 10, columns, noLink = true, ...restProps } = props;
 
+  const navigate = useNavigate();
+
   const viewportWidth = useViewportWidth();
   const gridWidth = viewportWidth > 1100 ? 1024 : (viewportWidth * 11) / 12;
   let cols: number = 0;
@@ -49,6 +53,13 @@ export default function ResponsiveGrid(props: GiphyGridProps) {
     cols = 3;
   }
 
+  const onGifClick: (
+    gif: IGif,
+    event: SyntheticEvent<HTMLElement, Event>,
+  ) => void = ({ id, type }) => {
+    navigate(generatePath(RoutePaths.Home.mediaInfo, { type, id }));
+  };
+
   return (
     <Grid
       className="mx-auto"
@@ -56,6 +67,7 @@ export default function ResponsiveGrid(props: GiphyGridProps) {
       gutter={gutter}
       columns={cols}
       noLink={noLink}
+      onGifClick={onGifClick}
       {...restProps}
     />
   );

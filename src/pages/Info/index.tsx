@@ -6,15 +6,15 @@ import UserAvatar, { AvatarSkeleton } from './Avatar';
 import { useQuery } from '@tanstack/react-query';
 import { QUERY_KEYS } from 'api/constants';
 import { IMG_FALLBACK_SRC } from './constants';
-import SkeletonImage from 'antd/es/skeleton/Image';
 import { upperCase } from 'lodash-es';
 import { CodeOutlined, HeartFilled, SendOutlined } from '@ant-design/icons';
 import './styles.css';
+import SkeletonImage from 'antd/es/skeleton/Image';
 
 export default function MediaInfo() {
   const { id } = useParams<{ type: MediaType; id: string }>();
 
-  const { data: gifInfo, isLoading } = useQuery({
+  const { data: gifInfo } = useQuery({
     queryKey: QUERY_KEYS.gifs.detail(id),
     queryFn: () => gf.gif(id!),
     enabled: !!id,
@@ -24,33 +24,32 @@ export default function MediaInfo() {
     if (gifInfo) {
       const {
         data: {
+          title,
           images: {
             downsized_medium: { url },
           },
         },
       } = gifInfo;
 
-      return <Image className="w-auto" src={url} fallback={IMG_FALLBACK_SRC} />;
+      return (
+        <div>
+          <div className="mb-2 text-sm font-semibold">{title}</div>
+          <Image className="w-auto" src={url} fallback={IMG_FALLBACK_SRC} />
+        </div>
+      );
     }
 
-    if (isLoading) {
-      return <SkeletonImage />;
-    }
-
-    return null;
+    return <SkeletonImage style={{ width: '480px', height: '480px' }} />;
   }
 
   function renderAvatar() {
-    if (isLoading) {
-      return <AvatarSkeleton />;
-    }
-
     if (gifInfo) {
       const {
         data: { rating },
       } = gifInfo;
+
       return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8">
           <UserAvatar user={gifInfo.data.user} />
           <Link to="https://support.giphy.com/hc/en-us/articles/360058840971-Content-Rating">
             Rating: {upperCase(rating)}
@@ -59,7 +58,7 @@ export default function MediaInfo() {
       );
     }
 
-    return null;
+    return <AvatarSkeleton />;
   }
 
   const onMouseEnterAction = (type: 'favorite' | 'share' | 'embed') => {

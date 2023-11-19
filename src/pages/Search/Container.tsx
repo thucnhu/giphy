@@ -1,12 +1,10 @@
 import { SwapOutlined } from '@ant-design/icons';
 import { MediaType } from '@giphy/js-fetch-api';
-import { IGif } from '@giphy/js-types';
 import { Row, Select } from 'antd';
 import ResponsiveGrid from 'components/ResponsiveGrid';
 import { gf } from 'api/giphy';
-import { SyntheticEvent, useState } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
-import { RoutePaths } from 'routes/types';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 type SortType = 'relevant' | 'recent';
 
@@ -14,7 +12,6 @@ export default function SearchResultsContainer() {
   const { type, keyword } = useParams<{ type: MediaType; keyword: string }>();
 
   const [sortType, setSortType] = useState<SortType>('recent');
-  const navigate = useNavigate();
 
   const fetchGifs = (offset: number) =>
     gf.search(keyword ?? '', {
@@ -26,13 +23,6 @@ export default function SearchResultsContainer() {
 
   const handleChange = (value: SortType) => {
     setSortType(value);
-  };
-
-  const onGifClick: (
-    gif: IGif,
-    event: SyntheticEvent<HTMLElement, Event>,
-  ) => void = ({ id }) => {
-    navigate(generatePath(RoutePaths.Home.mediaInfo, { type, id }));
   };
 
   return (
@@ -55,7 +45,6 @@ export default function SearchResultsContainer() {
         columns={4}
         fetchGifs={fetchGifs}
         key={keyword}
-        onGifClick={onGifClick}
       />
     </>
   );
